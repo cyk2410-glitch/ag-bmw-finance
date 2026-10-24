@@ -6,10 +6,16 @@ function decode(s = '') {
     .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
     .replace(/&quot;/g, '"').replace(/&#39;/g, "'").trim();
 }
+
 function field(xml, tag) {
-  const m = xml.match(new RegExp(`<${tag}(?:\s[^>]*)?>([\s\S]*?)<\/${tag}>`, 'i'));
+  const pattern = new RegExp(
+    `<${tag}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${tag}>`,
+    'i'
+  );
+  const m = xml.match(pattern);
   return decode(m?.[1] || '');
 }
+
 function parseRSS(xml) {
   return [...xml.matchAll(/<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/gi)]
     .map(m => {
